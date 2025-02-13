@@ -7,19 +7,30 @@ from supabase import create_client, Client
 #__________________ URL for uploading the file (Supabase upload URL)
 
 # URL for the file 
-FileURL = "https://wngqbymqpbrcpgtuqetr.supabase.co/storage/v1/object/sign/FOTA_DATA/User_App.bin?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJGT1RBX0RBVEEvVXNlcl9BcHAuYmluIiwiaWF0IjoxNzM0MjA2NjAyLCJleHAiOjE3NjU3NDI2MDJ9.h8ujQF30kVEZJjZVXbX15kaPLr6zi1cYOLVWzoU57zc&t=2024-12-14T20%3A03%3A22.478Z"
+FileURL = "Put you Own link in Cloud"
 
 # API KEY
-API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZ3FieW1xcGJyY3BndHVxZXRyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDIwMDM3MiwiZXhwIjoyMDQ5Nzc2MzcyfQ.9hTOd76a0rjjiZOZy8Hb6GKP0JXWCz6qyx4lQtoFgFU"
+API_KEY = "Your API_KEY"
+
+# Bucket Name
+Bucket_Name = "Your own Bucket"
+
+# File Name
+File_Name = " Your file name"
+
+# Table Name 
+Table_Name = " Your Table name"
 
 # Headers for the request
 headers = { "Authorization": API_KEY}
 
+#__________________________ Constant Varaible , don't change them
 # URL for Database
 SUPABASE_URL = "https://wngqbymqpbrcpgtuqetr.supabase.co"
 
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, API_KEY)
+
 
 
 """--------------------------------------------- Functions --------------------------------------------"""
@@ -58,7 +69,7 @@ def download_file():
 def remove_file_from_cloud():
     try:
         # Perform file deletion
-        response = supabase.storage.from_("FOTA_DATA").remove("User_App.bin")
+        response = supabase.storage.from_(Bucket_Name).remove(File_Name)
 
         # Check response
         if response:
@@ -76,7 +87,7 @@ def remove_file_from_cloud():
 def check_value():
 
     # Create the URL with API key as a query parameter
-    api_url = f"{SUPABASE_URL}/rest/v1/FOTA?select=value&apikey={API_KEY}"
+    api_url = f"{SUPABASE_URL}/rest/v1/{Table_Name}?select=value&apikey={API_KEY}"
     
     # Make a GET request to fetch data
     headers = {
@@ -100,7 +111,7 @@ def check_value():
 # Update the value in the Supabase database
 def update_value_to_zero():
     # Fetch the first (and only) row
-    response = supabase.table("FOTA").select("value").limit(1).execute()
+    response = supabase.table(Table_Name).select("value").limit(1).execute()
     
     # Correct way to access data
     data = response.data
@@ -111,7 +122,7 @@ def update_value_to_zero():
 
     # Perform the update operation on the first row
     update_response = (
-        supabase.table("FOTA")
+        supabase.table(Table_Name)
         .update({"value": 0})
         .neq("value", 0)  # Ensures only rows where value != 0 are updated
         .execute()
