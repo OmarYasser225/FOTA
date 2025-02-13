@@ -8,6 +8,8 @@ FOTA for STM32F103C8T6
 
 ## Cloud Notice 
 1- You need to create bucket in SupaBase
+
+
 2- You need to create a table with on column and named the column __value__
 
 
