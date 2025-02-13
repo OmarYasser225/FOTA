@@ -78,10 +78,14 @@
     // Initialize Supabase client
     const initializeSupabase = () => {
       const supabaseUrl = 'https://wngqbymqpbrcpgtuqetr.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZ3FieW1xcGJyY3BndHVxZXRyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDIwMDM3MiwiZXhwIjoyMDQ5Nzc2MzcyfQ.9hTOd76a0rjjiZOZy8Hb6GKP0JXWCz6qyx4lQtoFgFU';
+      const supabaseKey = 'Your API_KEY';
       return supabase.createClient(supabaseUrl, supabaseKey);
     };
 
+    // BUcket and Table Name
+    const BucketName = 'Your Bucket' ;
+    const TableName  = 'Your Table' ;
+    
     // Wait for the DOM to load before initializing Supabase
     document.addEventListener('DOMContentLoaded', () => {
       const supabase = initializeSupabase();
@@ -117,7 +121,7 @@
         try {
           // Upload file to Supabase Storage
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('FOTA_DATA') // Your bucket name
+            .from(BucketName) // Your bucket name
             .upload(`User_App.bin`, file , { upsert: true });
 
           if (uploadError) throw uploadError;
@@ -139,7 +143,7 @@
         try {
           // Update the value to 1 in the database
           const { data, error } = await supabase
-            .from('FOTA') // Your table name
+            .from(TableName) // Your table name
             .update({ value: 1 })
             .neq('value', -1);
             
